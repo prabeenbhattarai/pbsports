@@ -4,15 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom YouTube Player</title>
+    <style>
+        #controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        #playPause, #fullScreen {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div id="player"></div>
+    <div id="controls">
+        <span id="playPause">&#9658;</span>
+        <span id="fullScreen">&#8597;</span>
+    </div>
 
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        // Replace 'YOUR_API_KEY' with your actual API key
         const apiKey = 'AIzaSyCInyAYKZ6olevdoVVlaMzaJycydoQnkBo';
         const videoId = getVideoIdFromUrl('https://www.youtube.com/watch?v=t85LfjctSj8&ab');
+        let player;
 
         function getVideoIdFromUrl(url) {
             const urlParams = new URLSearchParams(new URL(url).search);
@@ -20,17 +36,20 @@
         }
 
         function onYouTubeIframeAPIReady() {
-            const player = new YT.Player('player', {
+            player = new YT.Player('player', {
                 height: '360',
                 width: '640',
                 videoId: videoId,
                 playerVars: {
-                    controls: 0,  // Hide player controls
-                    showinfo: 0,  // Hide video title and uploader information
-                    modestbranding: 1,  // Remove YouTube logo from the control bar
-                    fs: 0,  // Disable fullscreen button
-                    autohide: 1,  // Autohide video controls
-                    rel: 0  // Disable related videos at the end
+                    controls: 0,
+                    showinfo: 0,
+                    modestbranding: 1,
+                    fs: 0,
+                    autohide: 1,
+                    rel: 0,
+                    playsinline: 1,
+                    disablekb: 1,
+                    iv_load_policy: 3,
                 },
                 events: {
                     'onReady': onPlayerReady,
@@ -40,11 +59,35 @@
         }
 
         function onPlayerReady(event) {
+            // Play the video automatically when ready
             event.target.playVideo();
+
+            // Add event listeners to the play/pause and fullscreen buttons
+            document.getElementById('playPause').addEventListener('click', togglePlayPause);
+            document.getElementById('fullScreen').addEventListener('click', toggleFullScreen);
         }
 
         function onPlayerStateChange(event) {
             // You can handle player state changes here if needed
+        }
+
+        function togglePlayPause() {
+            if (player.getPlayerState() === YT.PlayerState.PAUSED) {
+                player.playVideo();
+            } else {
+                player.pauseVideo();
+            }
+        }
+
+        function toggleFullScreen() {
+            const iframe = document.getElementById('player');
+            if (!document.fullscreenElement) {
+                iframe.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
         }
     </script>
 </body>
