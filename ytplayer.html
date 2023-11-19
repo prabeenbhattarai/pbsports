@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom YouTube Player</title>
+</head>
+<body>
+    <div id="player"></div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        // Replace 'YOUR_API_KEY' with your actual API key
+        const apiKey = 'AIzaSyCInyAYKZ6olevdoVVlaMzaJycydoQnkBo';
+        const videoId = getVideoIdFromUrl('https://www.youtube.com/watch?v=t85LfjctSj8&ab');
+
+        function getVideoIdFromUrl(url) {
+            const urlParams = new URLSearchParams(new URL(url).search);
+            return urlParams.get('v');
+        }
+
+        function onYouTubeIframeAPIReady() {
+            const player = new YT.Player('player', {
+                height: '360',
+                width: '640',
+                videoId: videoId,
+                playerVars: {
+                    controls: 0,  // Hide player controls
+                    showinfo: 0,  // Hide video title and uploader information
+                    modestbranding: 1,  // Remove YouTube logo from the control bar
+                    fs: 0,  // Disable fullscreen button
+                    autohide: 1,  // Autohide video controls
+                    rel: 0  // Disable related videos at the end
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        function onPlayerStateChange(event) {
+            // You can handle player state changes here if needed
+        }
+    </script>
+</body>
+</html>
