@@ -1,94 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-  <title>pbsports content player</title>
-  <meta name="referrer" content="no-referrer">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      text-align: center;
-    }
-    #preloader {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: red;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    #video-container {
-      display: none; /* Hide the video container initially */
-    }
-    .video-js {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-</head>
+<script>
+function getParam ( sname )
+{
+  var params = location.search.substr(location.search.indexOf("?")+1);
+  var sval =  params.replace("url=", "");
+  
+  return sval;
+}
+var sv = getParam("sv");
+</script>
+<title> pbsports content player</title>
+<meta name="referrer" content="no-referrer">
+<style>html,body{margin:0;padding:0;background:#000;;}</style>
+<link href="video-js.min.css" rel="stylesheet">
+<script src="videojs-ie8.min.js"></script>
+<script src="video.js"></script>
+<script src="vjs-hls.min.js"></script>
 <body onload="init()">
-  <div id="preloader">PBSPORTS, WATCH LIVE SNYTIME, ANYWHERE</div>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
-  <!-- Your existing video code goes here -->
-  <div id="video-container">
-    <video id="streaming" autoplay preload="auto" height="100%" width="100%" class="video-js" controls data-setup='{"language": "vi"}'></video>
-    <img src="PB-SPORTS-removebg-preview.png" alt="Logo" style="position: absolute; top: 10px; right: 250px; opacity: 1; width: 10%; height: auto;">
-  </div>
+
 
 <script>
-  // Your existing JavaScript code goes here
-  function getParam(sname) {
-    var params = location.search.substr(location.search.indexOf("?") + 1);
-    var sval = params.replace("url=", "");
-    return sval;
-  }
-  var sv = getParam("sv");
+	 if (navigator.userAgent.match(/Android/i) ||  navigator.userAgent.match(/webOS/i) ||	 navigator.userAgent.match(/iPhone/i) ||     navigator.userAgent.match(/iPod/i) ||          navigator.userAgent.match(/iPad/i) ||		 navigator.userAgent.match(/Mobile Safari/i) ||            navigator.userAgent.match(/Blackberry/i)){
+				document.write("\<video style=\"z-index:2;width:100%;height:100%;background-color:#000;-o-object-fit:fill;object-fit:fill\"  controls=\"controls\" autoplay=\"false\" preload=\"auto\" height=\"auto\" src=\""+sv+"\"\>\<\/video\>");
+			 }else {
+				 
+				 document.write('<video id="streaming" autoplay  preload="auto" height="100%" width="100%" class="video-js" controls data-setup="{&quot;language&quot;: &quot;vi&quot;}"></video>');
 
-  // Function to hide the preloader and show the video container
-  function hidePreloaderAndPlay() {
-    // Hide the preloader
-    document.getElementById("preloader").style.display = "none";
+		function play(cid) {
+				src = cid;
+			player = videojs("streaming");
+			player.ready(function() {
+				player.src({
+					src: src,
+					type: "application/x-mpegURL",
+					autoplay: "false",  
+					image: "https://content.jwplatform.com/thumbs/xJ7Wcodt-720.jpg",
 
-    // Show the video container
-    document.getElementById("video-container").style.display = "block";
+				});
+			});
 
-    // Play the video
-    player.play();
-  }
+			//player.play();
 
-  // After the video is loaded and ready to play, hide the preloader and show the video container
-  function play(cid) {
-    src = cid;
-    player = videojs("streaming");
-    player.ready(function () {
-      player.src({
-        src: src,
-        type: "application/x-mpegURL",
-        autoplay: "false",
-        image: "https://content.jwplatform.com/thumbs/xJ7Wcodt-720.jpg",
-      });
+		}
 
-      // Listen for the canplaythrough event to determine when the video is ready to play
-      player.on("canplaythrough", function () {
-        // Call the function to hide preloader and play the video
-        hidePreloaderAndPlay();
-      });
-    });
-  }
+		play(sv);
+			 }
+	</script>
 
-  // Initialize the video player
-  play(sv);
-</script>
+  <img src="PB-SPORTS-removebg-preview.png" alt="Logo" style="position: absolute; top: 10px; right: 250px; opacity: 1; width: 10%; height: auto;">
+
+</div>
+<style>
+	.video-js {
+		width: 100%;
+		height: 100%;
+	}
+	body {
+		text-align: center;
+		margin: 0px;
+	}
+	#videojs {
+		width: 100%;
+		height: 100%;
+	}.streaming-dimensions{
+				width: 100% !important;
+		height: 100% !important;
+	}
+</style>
 
 
-
-  <script src="video-js.min.js"></script>
-  <script src="videojs-ie8.min.js"></script>
-  <script src="video.js"></script>
-  <script src="vjs-hls.min.js"></script>
 </body>
-</html>
