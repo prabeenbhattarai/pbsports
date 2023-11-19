@@ -37,12 +37,12 @@
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
-                height: '360',
+                 height: '360',
                 width: '640',
                 videoId: videoId,
                 playerVars: {
-                    controls: 1,
-                    showinfo: 0,
+                    controls: 0,
+                    showinfo: 0, // Hide video title and uploader information
                     modestbranding: 1,
                     fs: 0,
                     autohide: 1,
