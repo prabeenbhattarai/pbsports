@@ -39,37 +39,48 @@
     <img src="PB-SPORTS-removebg-preview.png" alt="Logo" style="position: absolute; top: 10px; right: 250px; opacity: 1; width: 10%; height: auto;">
   </div>
 
-  <script>
-    // Your existing JavaScript code goes here
-    function getParam(sname) {
-      var params = location.search.substr(location.search.indexOf("?")+1);
-      var sval =  params.replace("url=", "");
-      return sval;
-    }
-    var sv = getParam("sv");
+<script>
+  // Your existing JavaScript code goes here
+  function getParam(sname) {
+    var params = location.search.substr(location.search.indexOf("?") + 1);
+    var sval = params.replace("url=", "");
+    return sval;
+  }
+  var sv = getParam("sv");
 
-    // After the video is loaded and ready to play, hide the preloader and show the video container
-    function play(cid) {
-      src = cid;
-      player = videojs("streaming");
-      player.ready(function() {
-        player.src({
-          src: src,
-          type: "application/x-mpegURL",
-          autoplay: "false",  
-          image: "https://content.jwplatform.com/thumbs/xJ7Wcodt-720.jpg",
-        });
+  // Function to hide the preloader and show the video container
+  function hidePreloaderAndPlay() {
+    // Hide the preloader
+    document.getElementById("preloader").style.display = "none";
+
+    // Show the video container
+    document.getElementById("video-container").style.display = "block";
+
+    // Play the video
+    player.play();
+  }
+
+  // After the video is loaded and ready to play, hide the preloader and show the video container
+  function play(cid) {
+    src = cid;
+    player = videojs("streaming");
+    player.ready(function () {
+      player.src({
+        src: src,
+        type: "application/x-mpegURL",
+        autoplay: "false",
+        image: "https://content.jwplatform.com/thumbs/xJ7Wcodt-720.jpg",
       });
 
-      // Hide the preloader
-      document.getElementById('preloader').style.display = 'none';
+      // Call the function to hide preloader and play the video
+      hidePreloaderAndPlay();
+    });
+  }
 
-      // Show the video container
-      document.getElementById('video-container').style.display = 'block';
-    }
+  // Initialize the video player
+  play(sv);
+</script>
 
-    play(sv);
-  </script>
 
   <script src="video-js.min.js"></script>
   <script src="videojs-ie8.min.js"></script>
