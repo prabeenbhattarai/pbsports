@@ -72,14 +72,18 @@
         image: "https://content.jwplatform.com/thumbs/xJ7Wcodt-720.jpg",
       });
 
-      // Call the function to hide preloader and play the video
-      hidePreloaderAndPlay();
+      // Listen for the canplaythrough event to determine when the video is ready to play
+      player.on("canplaythrough", function () {
+        // Call the function to hide preloader and play the video
+        hidePreloaderAndPlay();
+      });
     });
   }
 
   // Initialize the video player
   play(sv);
 </script>
+
 
 
   <script src="video-js.min.js"></script>
