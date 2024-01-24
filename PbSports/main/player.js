@@ -62,3 +62,9 @@ $(window).on('load', function () {
     Mousetrap.bind('left', seekLeft);
     Mousetrap.bind('f', vidFullscreen);
 });
+document.addEventListener('DOMContentLoaded', function() {
+    var logoContainer = document.getElementById('logo-container');
+    logoContainer.style.position = 'absolute';
+    logoContainer.style.top = '10px'; // Adjust the top position as needed
+    logoContainer.style.right = '10px'; // Adjust the right position as needed
+});
