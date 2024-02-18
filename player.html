@@ -1,113 +1,109 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>video Player PBSPORTS</title>
-    <style>
-        /* Style for the video container */
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio for responsive design */
-            overflow: hidden;
-        }
-
-        /* Style for the iframe player */
-        .video-container iframe {
-            position: relative;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 420px;
-            border: none; /* Remove the iframe border */
-        }
-
-        /* Style for the copyright text */
-             .copyright-text {
-            position: absolute;
-            top: 39px;
-            right: 30px;
-            background: black;
-            color: white;
-            padding: 5px;
-            font-size: 14px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PbSports Content Player</title>
+<meta name="referrer" content="no-referrer">
+<link href="video-js.min.css" rel="stylesheet">
+<script src="videojs-ie8.min.js"></script>
+<script src="video.js"></script>
+<script src="vjs-hls.min.js"></script>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+  }
+  #video-player {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+  }
+  .video-js {
+    width: 100%;
+    height: 100%;
+  }
+  .custom-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+  .custom-controls button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    outline: none;
+    margin: 0 10px;
+  }
+</style>
 </head>
 <body>
-
-    <div class="video-container" id="video-container">
-        <!-- JavaScript will dynamically insert the iframe here -->
-    </div>
-
-    <script>
-        // Function to parse URL parameters
-        function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
-            name = name.replace(/[\[\]]/g, '\\$&');
-            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, ' '));
-        }
-
-        // Get the 'video_url' parameter from the URL
-        var videoUrl = getParameterByName('video_url');
-
-        if (videoUrl) {
-            // Create a container for the iframe and copyright text
-            var videoContainer = document.getElementById('video-container');
-            
-            // Create the iframe element with the specified URL
-            var iframe = document.createElement('iframe');
-            iframe.src = videoUrl;
-            iframe.setAttribute('frameborder', '0');
-            iframe.setAttribute('allowfullscreen', '');
-          
-          // Add the sandbox attribute with desired restrictions
-            iframe.setAttribute('sandbox', 'allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation'); 
-            
-            // Append the iframe to the container
-            videoContainer.appendChild(iframe);
-            
-            // Create the copyright text element
-          //  var copyrightText = document.createElement('div');
-          //  copyrightText.className = 'copyright-text';
-         //   copyrightText.innerHTML = 'Copyright PB-SPORTS';
-            
-            // Append the copyright text to the container
-            videoContainer.appendChild(copyrightText);
-        } else {
-            // Display an error message if the 'video_url' parameter is not provided
-            document.write('<p>Error: Video URL parameter is missing.</p>');
-        }
-    </script>
-  
-  <!--
-    <script type='text/javascript'>
-$(document).ready(function() {$(&#39;img#closed&#39;).click(function(){$(&#39;#bl_banner&#39;).hide(90);});});
-</script>
-<div id='fixedban' style='width:100%;margin:auto;text-align:center;float:none;overflow:hidden;display:scroll;position:fixed;bottom:0;z-index:999;-webkit-transform:translateZ(0);'>
-<div>
-<a id='close-fixedban' onclick='document.getElementById(&quot;fixedban&quot;).style.display = &quot;none&quot;;' style='cursor:pointer;'><img alt='close' src='https://1.bp.blogspot.com/-_A83iDM6JYc/VhtxROLILrI/AAAAAAAADK4/aM4ikIA6aqI/s1600/btn_close.gif' style='vertical-align:middle;' title='close button'/></a></div>
-<div style='text-align:center;display:block;max-width:728px;height:auto;overflow:hidden;margin:auto'>
-
-<script type="text/javascript">
-	atOptions = {
-		'key' : '0bf9fa0a59005b4b836444f060321d48',
-		'format' : 'iframe',
-		'height' : 250,
-		'width' : 300,
-		'params' : {}
-	};
-	document.write('<scr' + 'ipt type="text/javascript" src="http' + (location.protocol === 'https:' ? 's' : '') + '://www.profitablecreativeformat.com/0bf9fa0a59005b4b836444f060321d48/invoke.js"></scr' + 'ipt>');
-</script>
-  
+<div id="video-player">
+  <video id="streaming" class="video-js" controls preload="auto" height="100%" width="100%">
+    <source src="" type="application/x-mpegURL">
+  </video>
+  <img src="PB-SPORTS-removebg-preview.png" alt="Logo" style="position: absolute; top: 10px; right: 20px; opacity: 1; width: 10%; height: auto;">
+  <div class="custom-controls">
+    <button id="play-pause-btn">&#9658;</button>
+    <button id="fullscreen-btn">&#8597;</button>
+  </div>
 </div>
-</div>
--->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var sv = getParam('sv');
+    var player = videojs('streaming');
+    
+    if (navigator.userAgent.match(/Android/i) || 
+        navigator.userAgent.match(/webOS/i) ||	
+        navigator.userAgent.match(/iPhone/i) ||     
+        navigator.userAgent.match(/iPod/i) ||          
+        navigator.userAgent.match(/iPad/i) ||		 
+        navigator.userAgent.match(/Mobile Safari/i) ||            
+        navigator.userAgent.match(/Blackberry/i)) {
+      
+      player.src({
+        src: sv,
+        type: 'video/mp4'
+      });
+      
+    } else {
+      
+      player.src({
+        src: sv,
+        type: 'application/x-mpegURL'
+      });
+      
+    }
+    
+    // Play or pause video on button click
+    document.getElementById('play-pause-btn').addEventListener('click', function() {
+      if (player.paused()) {
+        player.play();
+      } else {
+        player.pause();
+      }
+    });
+    
+    // Toggle full screen on button click
+    document.getElementById('fullscreen-btn').addEventListener('click', function() {
+      if (!document.fullscreenElement) {
+        player.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+  });
   
-  
+  function getParam(sname) {
+    var params = location.search.substr(location.search.indexOf('?') + 1);
+    var sval = params.replace('url=', '');
+    return sval;
+  }
+</script>
 </body>
 </html>
