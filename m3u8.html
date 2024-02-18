@@ -22,12 +22,7 @@ var sv = getParam("sv");
 
 
 <script>
-	 if (navigator.userAgent.match(/Android/i) ||  navigator.userAgent.match(/webOS/i) ||	 navigator.userAgent.match(/iPhone/i) ||     navigator.userAgent.match(/iPod/i) ||          navigator.userAgent.match(/iPad/i) ||		 navigator.userAgent.match(/Mobile Safari/i) ||            navigator.userAgent.match(/Blackberry/i)){
-				document.write("\<video style=\"z-index:2;width:100%;height:100%;background-color:#000;-o-object-fit:fill;object-fit:fill\"  controls=\"controls\" autoplay=\"false\" preload=\"auto\" height=\"auto\" src=\""+sv+"\"\>\<\/video\>");
-			 }else {
-				 
-				 document.write('<video id="streaming" autoplay  preload="auto" height="100%" width="100%" class="video-js" controls data-setup="{&quot;language&quot;: &quot;vi&quot;}"></video>');
-
+	
 		function play(cid) {
 				src = cid;
 			player = videojs("streaming");
