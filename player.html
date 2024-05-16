@@ -98,11 +98,10 @@ document.addEventListener("DOMContentLoaded",()=> {
         z-index: 10; /* Ensure the logo is above the video */
     }
 
-    #player-container {
+     #player-container {
         position: relative;
         width: 100%;
-     height: auto;
-       
+        padding-top: 56.25%; /* Maintain video aspect ratio (16:9) */
         overflow: hidden; /* Prevent the video from overflowing */
     }
 
