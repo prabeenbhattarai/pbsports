@@ -87,6 +87,8 @@ document.addEventListener("DOMContentLoaded",()=> {
     .container {
         position: relative;
         width: 100%;
+        max-width: 960px; /* Maximum width for the video container */
+        margin: 0 auto; /* Center the container */
     }
 
     .logo {
@@ -100,10 +102,15 @@ document.addEventListener("DOMContentLoaded",()=> {
     #player-container {
         position: relative;
         width: 100%;
+        padding-top: 56.25%; /* Maintain video aspect ratio (16:9) */
     }
 
     #player {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
     }
 </style>
 </head>
@@ -147,3 +154,4 @@ document.addEventListener('DOMContentLoaded', () =>
 
 </body>
 </html>
+
