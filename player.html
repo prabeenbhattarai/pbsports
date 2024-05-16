@@ -1,3 +1,6 @@
+    <!-- This is designed by Pbsports for video player purpose, and embedded the code from open source project under MIT liscense.
+So, please contact or get code from original author and don't copy any code from here. -->
+
 <!DOCTYPE html> 
 <html lang="en"> 
 <head>
@@ -16,20 +19,7 @@
     <!-- Halfmoon CSS -->
     <link href="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.4/css/halfmoon.min.css" rel="stylesheet" />
     <title>pbsports: Watch live Anytime, Anywhere. </title>
-<style>
-	.container {
-    position: relative;
-}
 
-.logo {
-    position: absolute;
-    top: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
-    width: 100px; /* Adjust as needed */
-    height: auto; /* Adjust as needed */
-}
-
-</style>
 
      <script>
       var encodeContent = true; // Set to true or false based on your requirement
@@ -97,49 +87,54 @@ document.addEventListener("DOMContentLoaded",()=> {
 </head>
 <body class="dark-mode with-custom-scrollbars with-custom-css-scrollbars">
     
-    <img src="https://prabeenbhattarai.github.io/pbsports/logo1.png" alt="pbsports" class="logo">
-    <video id="player" controls preload="metadata" poster="https://prabeenbhattarai.github.io/pbsports/PB-Sports.net.gif" class="plyr">
+      <video id="player" controls preload="metadata" poster="https://prabeenbhattarai.github.io/pbsports/PB-Sports.net.gif" class="plyr">
         <source id="videoSource" type="application/x-mpegURL"/>
     </video>
 
-<script>
-    // Function to get URL parameters
-    function getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
+    <script>
+        // Function to get URL parameters
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
 
-    // Get video URL parameter and set it as the video source
-    var videoUrl = getParameterByName('url');
-    if (videoUrl) {
-        document.getElementById('videoSource').setAttribute('src', videoUrl);
-        document.getElementById('player').load();
-    }
-</script>
+        // Get video URL parameter and set it as the video source
+        var videoUrl = getParameterByName('url');
+        if (videoUrl) {
+            document.getElementById('videoSource').setAttribute('src', videoUrl);
+            document.getElementById('player').load();
+        }
+    </script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => 
 {
-    const player = Plyr.setup('.js-player');
+const player = Plyr.setup('.js-player');
 });  
 </script>
 
+
+
  <!-- Ads Here-->
 <script type="text/javascript">
-    atOptions = {
-        'key' : '0bf9fa0a59005b4b836444f060321d48',
-        'format' : 'iframe',
-        'height' : 250,
-        'width' : 300,
-        'params' : {}
-    };
+	atOptions = {
+		'key' : '0bf9fa0a59005b4b836444f060321d48',
+		'format' : 'iframe',
+		'height' : 250,
+		'width' : 300,
+		'params' : {}
+	};
 </script>
 <script type="text/javascript" src="//hailofficemeasure.com/0bf9fa0a59005b4b836444f060321d48/invoke.js"></script>
        
+</div>
+</div>
+    
 </body>
 </html>
