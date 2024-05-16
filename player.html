@@ -82,46 +82,68 @@ document.addEventListener("DOMContentLoaded",()=> {
              
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
+
+<style>
+    .container {
+        position: relative;
+        width: 100%;
+    }
+
+    .logo {
+        position: absolute;
+        top: 10px; /* Adjust top position as needed */
+        right: 10px; /* Adjust right position as needed */
+        width: 100px; /* Adjust width as needed */
+        z-index: 10; /* Ensure the logo is above the video */
+    }
+
+    #player-container {
+        position: relative;
+        width: 100%;
+    }
+
+    #player {
+        width: 100%;
+    }
+</style>
 </head>
 <body class="dark-mode with-custom-scrollbars with-custom-css-scrollbars">
     
-      <video id="player" controls preload="metadata" poster="https://prabeenbhattarai.github.io/pbsports/PB-Sports.net.gif" class="plyr">
-        <source id="videoSource" type="application/x-mpegURL"/>
-    </video>
+<div class="container">
+    <img src="https://prabeenbhattarai.github.io/pbsports/logo1.png" alt="pbsports" class="logo">
+    <div id="player-container">
+        <video id="player" controls preload="metadata" poster="https://prabeenbhattarai.github.io/pbsports/PB-Sports.net.gif" class="plyr">
+            <source id="videoSource" type="application/x-mpegURL"/>
+        </video>
+    </div>
+</div>
 
-    <script>
-        // Function to get URL parameters
-        function getParameterByName(name, link) {
-            if (!link) link = window.location.href;
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(link);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
+<script>
+    // Function to get URL parameters
+    function getParameterByName(name, link) {
+        if (!link) link = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(link);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
-        // Get video URL parameter and set it as the video source
-        var videoUrl = getParameterByName('link');
-        if (videoUrl) {
-            document.getElementById('videoSource').setAttribute('src', videoUrl);
-            document.getElementById('player').load();
-        }
-    </script>
-
+    // Get video URL parameter and set it as the video source
+    var videoUrl = getParameterByName('link');
+    if (videoUrl) {
+        document.getElementById('videoSource').setAttribute('src', videoUrl);
+        document.getElementById('player').load();
+    }
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => 
 {
-const player = Plyr.setup('.js-player');
+    const player = Plyr.setup('#player');
 });  
 </script>
 
-
-
-
-</div>
-</div>
-    
 </body>
 </html>
