@@ -91,18 +91,18 @@ document.addEventListener("DOMContentLoaded",()=> {
 
     <script>
         // Function to get URL parameters
-        function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
+        function getParameterByName(name, link) {
+            if (!link) link = window.location.href;
             name = name.replace(/[\[\]]/g, "\\$&");
             var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
+                results = regex.exec(link);
             if (!results) return null;
             if (!results[2]) return '';
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
         // Get video URL parameter and set it as the video source
-        var videoUrl = getParameterByName('url');
+        var videoUrl = getParameterByName('link');
         if (videoUrl) {
             document.getElementById('videoSource').setAttribute('src', videoUrl);
             document.getElementById('player').load();
