@@ -60,16 +60,11 @@
         }
         #logo {
             position: absolute;
-            top: 15px; /* Normal position */
-            right: 30px;
+            top: 15px; /* Adjust as needed */
+            right: 30px; /* Adjust as needed */
             width: 150px; /* Medium size */
             z-index: 1000; /* Ensure it appears above the iframe */
             pointer-events: none; /* Make the logo non-clickable */
-            transition: top 0.3s; /* Smooth transition when moving */
-        }
-        /* Adjust position when in fullscreen mode */
-        .fullscreen #logo {
-            top: 50px; /* Move it a bit lower in fullscreen mode */
         }
     </style>
     <script>
@@ -95,43 +90,12 @@
         function toggleLogoFullscreen() {
             const logo = document.getElementById('logo');
             if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                document.body.classList.add('fullscreen');
+                const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+                fullscreenElement.appendChild(logo);
             } else {
-                document.body.classList.remove('fullscreen');
+                document.getElementById('container').appendChild(logo);
             }
         }
-
-        function requestFullScreen(element) {
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) { /* Firefox */
-                element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) { /* IE/Edge */
-                element.msRequestFullscreen();
-            }
-        }
-
-        function exitFullScreen() {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) { /* Firefox */
-                document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { /* IE/Edge */
-                document.msExitFullscreen();
-            }
-        }
-
-        $(document).on('dblclick', function() {
-            if (!document.fullscreenElement) {
-                requestFullScreen(document.documentElement);
-            } else {
-                exitFullScreen();
-            }
-        });
     </script>
 </head>
 <body>
