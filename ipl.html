@@ -60,10 +60,16 @@
         }
         #logo {
             position: absolute;
-            top: 15px; /* Adjust as needed */
-            right: 30px; /* Adjust as needed */
+            top: 15px; /* Normal position */
+            right: 30px;
             width: 150px; /* Medium size */
             z-index: 1000; /* Ensure it appears above the iframe */
+            pointer-events: none; /* Make the logo non-clickable */
+            transition: top 0.3s; /* Smooth transition when moving */
+        }
+        /* Adjust position when in fullscreen mode */
+        .fullscreen #logo {
+            top: 50px; /* Move it a bit lower in fullscreen mode */
         }
     </style>
     <script>
@@ -89,10 +95,9 @@
         function toggleLogoFullscreen() {
             const logo = document.getElementById('logo');
             if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-                fullscreenElement.appendChild(logo);
+                document.body.classList.add('fullscreen');
             } else {
-                document.getElementById('container').appendChild(logo);
+                document.body.classList.remove('fullscreen');
             }
         }
     </script>
