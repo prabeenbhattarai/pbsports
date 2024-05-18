@@ -27,10 +27,6 @@
             margin: 0;
             padding: 0;
         }
-        #container {
-            position: absolute;
-            text-align: center;
-        }
         video {
             outline: 0;
         }
@@ -63,9 +59,9 @@
             height: 100% !important;
         }
         #logo {
-            position: fixed;
+            position: absolute;
             top: 10px; /* Adjust as needed */
-            right: 20px; /* Adjust as needed */
+            right: 10px; /* Adjust as needed */
             width: 150px; /* Medium size */
             z-index: 1000; /* Ensure it appears above the iframe */
         }
@@ -93,9 +89,10 @@
         function toggleLogoFullscreen() {
             const logo = document.getElementById('logo');
             if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-                logo.style.display = 'block';
+                const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+                fullscreenElement.appendChild(logo);
             } else {
-                logo.style.display = 'block';
+                document.getElementById('container').appendChild(logo);
             }
         }
     </script>
