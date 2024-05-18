@@ -1,74 +1,128 @@
 
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0 , user-scalable=no">
+    <meta name="viewport" content="width=device-width" />
+    <!-- SEO-->
+    <meta name="author" content="T20HD Embed" />
+    <meta name="designer" content="T20 " />
+    <meta name="description" content="Watch Live Streaming T20. No signup required">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
+     <link rel="stylesheet" href="/dist/wmlogo.css" />
+    <script src="https://kit.fontawesome.com/bf2610f0a2.js" crossorigin="anonymous"></script>
+    <!-- Halfmoon CSS -->
+    <link href="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.4/css/halfmoon.min.css" rel="stylesheet" />
+    <title>YoSinTV Plyr Player </title>
+
+
+     <script>
+      var encodeContent = true; // Set to true or false based on your requirement
+    </script>
+    
+
+  <script>
+    // Example function using the encode variable
+    function encodeLinks() {
+      if (encodeContent) {
+        // Logic to encode links
+        console.log('Links encoded.');
+      } else {
+        console.log('Links not encoded.');
+      }
+    }
+
+    // Call the function
+    encodeLinks();
+  </script>
+
+
+    
+    <b:if cond='data:content == "false"'>
+      </b:if>
+      <script>
+        var encode = <data:content/>;
+      </script>
+
+
+    
 <script>
-function getParam ( sname )
-{
-  var params = location.search.substr(location.search.indexOf("?")+1);
-  var sval =  params.replace("url=", "");
-  
-  return sval;
-}
-var sv = getParam("sv");
+document.addEventListener("DOMContentLoaded",()=> {
+  const e = document.querySelector("video"),
+    n = e.getElementsByTagName("source")[0].src,
+    o = {};
+  if(Hls.isSupported()) {
+    var config = {
+      maxMaxBufferLength: 100,
+    };
+    const t = new Hls(config);
+    t.loadSource(n), t.on(Hls.Events.MANIFEST_PARSED, function(n, l) {
+      const s = t.levels.map(e => e.height);
+      o.quality = {
+        default: s[0],
+        options: s,
+        forced: !0,
+        onChange: e => (function(e) {
+          window.hls.levels.forEach((n, o) => {
+            n.height === e && (window.hls.currentLevel = o)
+          })
+        })(e)
+      };
+      new Plyr(e, o)
+    }), t.attachMedia(e), window.hls = t
+  } else {
+    new Plyr(e, o)
+  }
+});
 </script>
-<title> pbsports content player</title>
-<meta name="referrer" content="no-referrer">
-<style>html,body{margin:0;padding:0;background:#000;;}</style>
-<link href="video-js.min.css" rel="stylesheet">
-<script src="videojs-ie8.min.js"></script>
-<script src="video.js"></script>
-<script src="vjs-hls.min.js"></script>
-<body onload="init()">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
 
+             
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
+</head>
+<body class="dark-mode with-custom-scrollbars with-custom-css-scrollbars">
+    
+      <video id="player" controls preload="metadata" poster="https://yosintv2.github.io/tv/yosintv.png" class="plyr">
+        <source id="videoSource" type="application/x-mpegURL"/>
+    </video>
+
+    <script>
+        // Function to get URL parameters
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        // Get video URL parameter and set it as the video source
+        var videoUrl = getParameterByName('url');
+        if (videoUrl) {
+            document.getElementById('videoSource').setAttribute('src', videoUrl);
+            document.getElementById('player').load();
+        }
+    </script>
 
 
 <script>
-	 if (navigator.userAgent.match(/Android/i) ||  navigator.userAgent.match(/webOS/i) ||	 navigator.userAgent.match(/iPhone/i) ||     navigator.userAgent.match(/iPod/i) ||          navigator.userAgent.match(/iPad/i) ||		 navigator.userAgent.match(/Mobile Safari/i) ||            navigator.userAgent.match(/Blackberry/i)){
-				document.write("\<video style=\"z-index:2;width:100%;height:100%;background-color:#000;-o-object-fit:fill;object-fit:fill\"  controls=\"controls\" autoplay=\"false\" preload=\"auto\" height=\"auto\" src=\""+sv+"\"\>\<\/video\>");
-			 }else {
-				 
-				 document.write('<video id="streaming" autoplay  preload="auto" height="100%" width="100%" class="video-js" controls data-setup="{&quot;language&quot;: &quot;vi&quot;}"></video>');
-
-		function play(cid) {
-				src = cid;
-			player = videojs("streaming");
-			player.ready(function() {
-				player.src({
-					src: src,
-					type: "application/x-mpegURL",
-					autoplay: "false",  
-					image: "https://content.jwplatform.com/thumbs/xJ7Wcodt-720.jpg",
-
-				});
-			});
-
-			//player.play();
-
-		}
-
-		play(sv);
-			 }
-	</script>
-
-  <img src="PB-SPORTS-removebg-preview.png" alt="Logo" style="position: absolute; top: 10px; right: 250px; opacity: 1; width: 10%; height: auto;">
-
-</div>
-<style>
-	.video-js {
-		width: 100%;
-		height: 100%;
-	}
-	body {
-		text-align: center;
-		margin: 0px;
-	}
-	#videojs {
-		width: 100%;
-		height: 100%;
-	}.streaming-dimensions{
-				width: 100% !important;
-		height: 100% !important;
-	}
-</style>
+document.addEventListener('DOMContentLoaded', () => 
+{
+const player = Plyr.setup('.js-player');
+});  
+</script>
 
 
+
+<!-- Ads Here-->
+<script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('ofleafeona.com',7496520,document.createElement('script'))</script>
+
+	
+    
 </body>
+</html>
