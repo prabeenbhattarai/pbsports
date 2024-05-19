@@ -1,127 +1,96 @@
   <!-- This is designed by Pbsports for video player purpose, and embedded the code from open source project under MIT liscense.
 So, please contact or get code from original author and don't copy any code from here. -->
 
-<!DOCTYPE html> 
-<html lang="en"> 
-<head>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0 , user-scalable=no">
-    <meta name="viewport" content="width=device-width" />
-    <!-- SEO-->
-    <meta name="author" content="pbsports Embed" />
-    <meta name="designer" content="pbsports " />
-    <meta name="description" content="pbsports Live anytime, anywhere">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
-    <script src="https://kit.fontawesome.com/bf2610f0a2.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.4/css/halfmoon.min.css" rel="stylesheet" />
-    <title>pbsports: Watch live Anytime, Anywhere. </title>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='https://www.yosin-tv.net/favicon.ico' rel='icon' type='image/x-icon'/>
+    <title>YoSinTV MID Player</title>
+    <style>
+                     /*Font Library https://fonts.google.com/ */
+   @font-face{font-family:&#39;Neo Sans Arabic&#39;;font-style:normal;font-weight:normal;font-display:swap;src:local(&#39;Neo Sans Arabic&#39;),url(&#39;https://cdn.statically.io/gh/yallashoot808/yalla-shoot-new/6a47ce1e/NeoSansArabic.woff&#39;) format(&#39;woff&#39;)}
 
+            
+        /* Add your custom styles for the iframe container */
+        #player-container {
+            position: relative;
+            overflow: hidden;
+            padding-top: 56.25%; /* 16:9 aspect ratio (change based on your player's aspect ratio) */
+        }
 
-     <script>
-      var encodeContent = true; // Set to true or false based on your requirement
-    </script>
-    
-
-  <script>
-    // Example function using the encode variable
-    function encodeLinks() {
-      if (encodeContent) {
-        // Logic to encode links
-        console.log('Links encoded.');
-      } else {
-        console.log('Links not encoded.');
-      }
+        #player-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            border: 0;
+        }
+    </style>
+  
+  
+    <style>
+    #player-container {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
     }
-
-    // Call the function
-    encodeLinks();
-  </script>
-
-
-    
-    <b:if cond='data:content == "false"'>
-      </b:if>
-      <script>
-        var encode = <data:content/>;
-      </script>
-
-
-    
-<script>
-document.addEventListener("DOMContentLoaded",()=> {
-  const e = document.querySelector("video"),
-    n = e.getElementsByTagName("source")[0].src,
-    o = {};
-  if(Hls.isSupported()) {
-    var config = {
-      maxMaxBufferLength: 100,
-    };
-    const t = new Hls(config);
-    t.loadSource(n), t.on(Hls.Events.MANIFEST_PARSED, function(n, l) {
-      const s = t.levels.map(e => e.height);
-      o.quality = {
-        default: s[0],
-        options: s,
-        forced: !0,
-        onChange: e => (function(e) {
-          window.hls.levels.forEach((n, o) => {
-            n.height === e && (window.hls.currentLevel = o)
-          })
-        })(e)
-      };
-      new Plyr(e, o)
-    }), t.attachMedia(e), window.hls = t
-  } else {
-    new Plyr(e, o)
-  }
-});
-</script>
-
-             
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
+    #iframe-iframe, #jwPlayer {
+      height: 100vh !important;
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+    #container {
+      position: absolute;
+      text-align: center;
+    }
+    video {
+      outline: 0;
+    }
+    #text {
+      position: fixed;
+      border: 0;
+      left: 0;
+      width: 100%;
+      color: #fff;
+      bottom: 50px;
+      text-align: center;
+      font-family: tahoma;
+      font-size: 20px;
+      z-index: 9999;
+    }
+  </style>
+  
 </head>
-<body class="dark-mode with-custom-scrollbars with-custom-css-scrollbars">
-    
-      <video id="player" controls preload="metadata" poster="https://prabeenbhattarai.github.io/pbsports/PB-Sports.net.gif" class="plyr">
-        <source id="videoSource" type="application/x-mpegURL"/>
-    </video>
+<body>
 
-    <script>
-        // Function to get URL parameters
-        function getParameterByName(name, link) {
-            if (!link) link = window.location.href;
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(link);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
-
-        // Get video URL parameter and set it as the video source
-        var videoUrl = getParameterByName('link');
-        if (videoUrl) {
-            document.getElementById('videoSource').setAttribute('src', videoUrl);
-            document.getElementById('player').load();
-        }
-    </script>
-
+<div id="player-container">
+    <iframe id="player-iframe" allowfullscreen></iframe>
+</div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => 
-{
-const player = Plyr.setup('.js-player');
-});  
+    // Get the custom ID from the URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const customID = urlParams.get('m');
+
+    // Replace (custome_ID) in the original URL with the custom ID
+    const originalURL = `https://prabeenbhattarai.github.io/pbsports/m3u8.html?url=https://sports.lvyclv.com/live/m${customID}/playlist.m3u8`;
+
+    // Set the iframe source to the modified URL
+    document.getElementById('player-iframe').src = originalURL;
 </script>
 
 
+        
 
-
-</div>
-</div>
-    
+        
 </body>
-</html> 
+</html>
