@@ -1,118 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom YouTube Video Player</title>
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://prabeenbhattarai.github.io/pbsports/jwplayer.js"></script>
     <style>
-        body, html {
+        #container {
             margin: 0;
             padding: 0;
+            width: 100%;
             height: 100%;
+            background: #8a0000;
+            color: #fff;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: black;
-        }
-        #player-container {
             position: relative;
+        }
+        #iframe, #jwPlayer {
+            height: 100vh !important;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        video {
+            outline: 0;
+        }
+        #text {
+            position: fixed;
+            border: 0;
+            left: 0;
+            width: 100%;
+            color: #fff;
+            bottom: 50px;
+            text-align: center;
+            font-family: tahoma;
+            font-size: 20px;
+            z-index: 9999;
+        }
+        .video-js {
             width: 100%;
             height: 100%;
         }
-        #player {
+        body {
+            text-align: center;
+            margin: 0px;
+        }
+        #videojs {
             width: 100%;
             height: 100%;
         }
-        .controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-        }
-        .control-btn {
-            background-color: rgba(255, 255, 255, 0.7);
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .control-btn:hover {
-            background-color: rgba(255, 255, 255, 1);
-        }
-        .hidden {
-            display: none;
+        .streaming-dimensions {
+            width: 100% !important;
+            height: 100% !important;
         }
     </style>
+    <script>
+        function getParam(sname) {
+            var params = location.search.substr(location.search.indexOf("?") + 1);
+            var sval = params.replace("url=", "");
+            return sval;
+        }
+        var sv = getParam("sv");
+
+        $(document).ready(function() {
+            $("img").on("contextmenu", function() {
+                return false;
+            });
+
+            // Handle fullscreen changes
+            document.addEventListener('fullscreenchange', toggleLogoFullscreen);
+            document.addEventListener('webkitfullscreenchange', toggleLogoFullscreen);
+            document.addEventListener('mozfullscreenchange', toggleLogoFullscreen);
+            document.addEventListener('MSFullscreenChange', toggleLogoFullscreen);
+        });
+
+        function toggleLogoFullscreen() {
+            const logo = document.getElementById('logo');
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+                const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+                fullscreenElement.appendChild(logo);
+            } else {
+                document.getElementById('container').appendChild(logo);
+            }
+        }
+    </script>
 </head>
 <body>
-    <div id="player-container">
-        <div id="player"></div>
-        <div class="controls">
-            <button class="control-btn" id="playPauseBtn">Play</button>
-            <button class="control-btn hidden" id="pauseBtn">Pause</button>
-            <button class="control-btn" id="muteBtn">Mute</button>
-            <button class="control-btn hidden" id="unmuteBtn">Unmute</button>
-            <button class="control-btn" id="fullScreenBtn">Full Screen</button>
-        </div>
+    <div id="container">
+        <iframe id="iframe" allowfullscreen="allowfullscreen" allowtransparency="true" frameborder="5" height="100%" marginheight="0" marginwidth="0" sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation" width="100%"></iframe>
+        <div id="jwPlayer"></div>
+        <div id="jwplayers"></div>
     </div>
-
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player;
-        let isPlaying = false;
+        // Get the `src` parameter from the URL.
+        const urlParams = new URLSearchParams(window.location.search);
+        const srcParam = urlParams.get('src');
+        const videoUrl = urlParams.get('url');
+        
+        if (srcParam) {
+            // Show the iframe player
+            document.getElementById('iframe').src = srcParam;
+            document.getElementById('jwPlayer').style.display = 'none';
+        } else if (videoUrl) {
+            const videoId = extractVideoId(videoUrl);
+            const youtubeEmbedUrl = `https://www.youtube.com/embed/${videoId}?controls=0&showinfo=0&rel=0&modestbranding=1`;
 
-        // Function called by the IFrame Player API when the API code has loaded
-        function onYouTubeIframeAPIReady() {
-            // Create the YouTube player
-            player = new YT.Player('player', {
-                videoId: '', // Initially empty
-                playerVars: {
-                    'controls': 0, // Hide default controls
-                    'rel': 0, // Disable related videos
-                    'showinfo': 0, // Hide video title
-                    'modestbranding': 1, // Restrict YouTube logo
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
+            jwplayer("jwPlayer").setup({
+                file: youtubeEmbedUrl,
+                width: "100%",
+                height: "100%",
+                autostart: true,
+                mute: false,
+                controls: true
             });
-        }
-
-        // Function called when the player is ready
-        function onPlayerReady(event) {
-            // Check if there's a video URL in the page's URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoUrl = urlParams.get('url');
-            if (videoUrl) {
-                loadVideoByUrl(videoUrl);
-            }
-        }
-
-        // Function called when the player's state changes
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
-                isPlaying = true;
-                document.getElementById('playPauseBtn').classList.add('hidden');
-                document.getElementById('pauseBtn').classList.remove('hidden');
-            } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
-                isPlaying = false;
-                document.getElementById('playPauseBtn').classList.remove('hidden');
-                document.getElementById('pauseBtn').classList.add('hidden');
-            }
-        }
-
-        // Function to load a video from a URL
-        function loadVideoByUrl(url) {
-            const videoId = extractVideoId(url);
-            if (videoId) {
-                player.loadVideoById(videoId);
-            } else {
-                alert('Invalid YouTube URL');
-            }
+            document.getElementById('iframe').style.display = 'none';
         }
 
         // Function to extract video ID from a YouTube URL
@@ -121,51 +127,6 @@
             const matches = url.match(regex);
             return matches ? matches[1] : null;
         }
-
-        // Play/Pause button functionality
-        document.getElementById('playPauseBtn').addEventListener('click', () => {
-            player.playVideo();
-        });
-
-        document.getElementById('pauseBtn').addEventListener('click', () => {
-            player.pauseVideo();
-        });
-
-        // Mute/Unmute button functionality
-        document.getElementById('muteBtn').addEventListener('click', () => {
-            player.mute();
-            document.getElementById('muteBtn').classList.add('hidden');
-            document.getElementById('unmuteBtn').classList.remove('hidden');
-        });
-
-        document.getElementById('unmuteBtn').addEventListener('click', () => {
-            player.unMute();
-            document.getElementById('muteBtn').classList.remove('hidden');
-            document.getElementById('unmuteBtn').classList.add('hidden');
-        });
-
-        // Fullscreen button functionality
-        document.getElementById('fullScreenBtn').addEventListener('click', () => {
-            const playerContainer = document.getElementById('player-container');
-            if (playerContainer.requestFullscreen) {
-                playerContainer.requestFullscreen();
-            } else if (playerContainer.mozRequestFullScreen) { // Firefox
-                playerContainer.mozRequestFullScreen();
-            } else if (playerContainer.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                playerContainer.webkitRequestFullscreen();
-            } else if (playerContainer.msRequestFullscreen) { // IE/Edge
-                playerContainer.msRequestFullscreen();
-            }
-        });
-
-        // Load video if URL parameter is present on page load
-        window.onload = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoUrl = urlParams.get('url');
-            if (videoUrl) {
-                loadVideoByUrl(videoUrl);
-            }
-        };
     </script>
 </body>
 </html>
