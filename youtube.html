@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Player</title>
+    <title>Custom YouTube Video Player</title>
     <style>
         body, html {
             margin: 0;
@@ -14,6 +14,11 @@
             align-items: center;
             justify-content: center;
             background-color: black;
+        }
+        #player-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
         }
         #player {
             width: 100%;
@@ -37,13 +42,21 @@
         .control-btn:hover {
             background-color: rgba(255, 255, 255, 1);
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div id="player"></div>
-    <div class="controls">
-        <button class="control-btn" id="playPauseBtn">Play</button>
-        <button class="control-btn" id="fullScreenBtn">Full Screen</button>
+    <div id="player-container">
+        <div id="player"></div>
+        <div class="controls">
+            <button class="control-btn" id="playPauseBtn">Play</button>
+            <button class="control-btn hidden" id="pauseBtn">Pause</button>
+            <button class="control-btn" id="muteBtn">Mute</button>
+            <button class="control-btn hidden" id="unmuteBtn">Unmute</button>
+            <button class="control-btn" id="fullScreenBtn">Full Screen</button>
+        </div>
     </div>
 
     <script src="https://www.youtube.com/iframe_api"></script>
@@ -56,6 +69,12 @@
             // Create the YouTube player
             player = new YT.Player('player', {
                 videoId: '', // Initially empty
+                playerVars: {
+                    'controls': 0, // Hide default controls
+                    'rel': 0, // Disable related videos
+                    'showinfo': 0, // Hide video title
+                    'modestbranding': 1, // Restrict YouTube logo
+                },
                 events: {
                     'onReady': onPlayerReady,
                     'onStateChange': onPlayerStateChange
@@ -77,10 +96,12 @@
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.PLAYING) {
                 isPlaying = true;
-                document.getElementById('playPauseBtn').innerText = 'Pause';
+                document.getElementById('playPauseBtn').classList.add('hidden');
+                document.getElementById('pauseBtn').classList.remove('hidden');
             } else if (event.data == YT.PlayerState.PAUSED || event.data == YT.PlayerState.ENDED) {
                 isPlaying = false;
-                document.getElementById('playPauseBtn').innerText = 'Play';
+                document.getElementById('playPauseBtn').classList.remove('hidden');
+                document.getElementById('pauseBtn').classList.add('hidden');
             }
         }
 
@@ -103,24 +124,37 @@
 
         // Play/Pause button functionality
         document.getElementById('playPauseBtn').addEventListener('click', () => {
-            if (isPlaying) {
-                player.pauseVideo();
-            } else {
-                player.playVideo();
-            }
+            player.playVideo();
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            player.pauseVideo();
+        });
+
+        // Mute/Unmute button functionality
+        document.getElementById('muteBtn').addEventListener('click', () => {
+            player.mute();
+            document.getElementById('muteBtn').classList.add('hidden');
+            document.getElementById('unmuteBtn').classList.remove('hidden');
+        });
+
+        document.getElementById('unmuteBtn').addEventListener('click', () => {
+            player.unMute();
+            document.getElementById('muteBtn').classList.remove('hidden');
+            document.getElementById('unmuteBtn').classList.add('hidden');
         });
 
         // Fullscreen button functionality
         document.getElementById('fullScreenBtn').addEventListener('click', () => {
-            const playerElement = document.getElementById('player');
-            if (playerElement.requestFullscreen) {
-                playerElement.requestFullscreen();
-                          } else if (playerElement.mozRequestFullScreen) { // Firefox
-                playerElement.mozRequestFullScreen();
-            } else if (playerElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                playerElement.webkitRequestFullscreen();
-            } else if (playerElement.msRequestFullscreen) { // IE/Edge
-                playerElement.msRequestFullscreen();
+            const playerContainer = document.getElementById('player-container');
+            if (playerContainer.requestFullscreen) {
+                playerContainer.requestFullscreen();
+            } else if (playerContainer.mozRequestFullScreen) { // Firefox
+                playerContainer.mozRequestFullScreen();
+            } else if (playerContainer.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                playerContainer.webkitRequestFullscreen();
+            } else if (playerContainer.msRequestFullscreen) { // IE/Edge
+                playerContainer.msRequestFullscreen();
             }
         });
 
@@ -135,5 +169,3 @@
     </script>
 </body>
 </html>
-
-           
