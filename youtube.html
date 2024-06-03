@@ -33,6 +33,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1000; /* Ensure controls are above everything */
         }
         .button {
             margin: 0 10px;
@@ -42,15 +43,33 @@
             border: none;
             cursor: pointer;
         }
+        .time {
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay to cover YouTube elements */
+            z-index: 999; /* Ensure overlay is above the player */
+            pointer-events: none; /* Allow clicks to pass through */
+        }
     </style>
 </head>
 <body>
     <div id="container">
         <div id="player"></div>
+        <div class="overlay"></div> <!-- Added overlay -->
         <div class="controls">
             <button class="button" id="playPause">Play</button>
             <button class="button" id="muteUnmute">Mute</button>
+            <button class="button" id="rewind">Rewind 10s</button>
+            <button class="button" id="forward">Forward 10s</button>
             <button class="button" id="fullscreen">Fullscreen</button>
+            <div class="time" id="currentTime">0:00</div> / <div class="time" id="duration">0:00</div>
         </div>
     </div>
     <script>
@@ -72,13 +91,13 @@
                     'controls': 0,
                     'modestbranding': 1,
                     'rel': 0,
-                    'iv_load_policy': 3, // Disable video annotations
-                    'disablekb': 1, // Disable keyboard controls
-                    'fs': 1, // Allow fullscreen
-                    'showinfo': 0 // Deprecated but included for potential compatibility
+                    'iv_load_policy': 3,
+                    'disablekb': 1,
+                    'fs': 1
                 },
                 events: {
-                    'onReady': onPlayerReady
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
                 }
             });
         }
@@ -106,6 +125,17 @@
                 muted = !muted;
             });
 
+            document.getElementById('rewind').addEventListener('click', function() {
+                const currentTime = player.getCurrentTime();
+                player.seekTo(Math.max(0, currentTime - 10), true);
+            });
+
+            document.getElementById('forward').addEventListener('click', function() {
+                const currentTime = player.getCurrentTime();
+                const duration = player.getDuration();
+                player.seekTo(Math.min(duration, currentTime + 10), true);
+            });
+
             document.getElementById('fullscreen').addEventListener('click', function() {
                 const iframe = document.getElementById('player').querySelector('iframe');
                 if (iframe.requestFullscreen) {
@@ -118,6 +148,32 @@
                     iframe.msRequestFullscreen(); // IE/Edge
                 }
             });
+
+            updateTimes();
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                playing = true;
+                document.getElementById('playPause').textContent = 'Pause';
+                setInterval(updateTimes, 1000);
+            } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+                playing = false;
+                document.getElementById('playPause').textContent = 'Play';
+            }
+        }
+
+        function updateTimes() {
+            const currentTime = player.getCurrentTime();
+            const duration = player.getDuration();
+            document.getElementById('currentTime').textContent = formatTime(currentTime);
+            document.getElementById('duration').textContent = formatTime(duration);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
         }
 
         function extractVideoId(url) {
