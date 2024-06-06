@@ -21,10 +21,21 @@
             height: 100%;
             border: none;
         }
+        .overlay-text {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10; /* Ensure the text is above the iframe */
+            pointer-events: none; /* Allow clicks to pass through the text */
+        }
     </style>
 </head>
 <body>
     <div class="video-container">
+          <div class="overlay-text">pbsports</div>
         <iframe id="videoPlayer" allowfullscreen sandbox="allow-scripts allow-same-origin"></iframe>
     </div>
     <script>
